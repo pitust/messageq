@@ -1,0 +1,5 @@
+target create boot/kernel.elf
+gdb-remote 1234
+settings set target.x86-disassembly-flavor intel
+command alias mon process plugin packet monitor
+command alias info process plugin packet monitor info

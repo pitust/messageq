@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "Tracefile": "yaml",
+        "*.s": "platformio-debug.asm",
+        "config": "toml",
+        "*.board": "yaml",
+        "liballoc.h": "c",
+        "cstddef": "c"
+    },
+    "go.toolsEnvVars": {
+        "GOROOT": "/Users/pitust/Library/Caches/tinygo/goroot-go1.16.5-4ad44932c1134d688341da09b93e8ac01592bce5cd71dc2885a582efd0e1034d",
+        "GOFLAGS": "-tags=linux,amd64,tinygo,gc.extalloc,scheduler.coroutines"
+    }
+}
