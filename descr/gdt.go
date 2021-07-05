@@ -26,7 +26,7 @@ func InitGDT() {
 	gdtptr := uintptr(unsafe.Pointer(&gdt[0]))
 	tssptr := uint64(uintptr(unsafe.Pointer(&tss[0])))
 	tss[0x66] = 13
-	*misc.UsizePtr(uintptr(unsafe.Pointer(&tss[0]))) = getIntStack()
+	*misc.UsizePtr(uintptr(unsafe.Pointer(&tss[4]))) = getIntStack()
 	*(*uint64)(unsafe.Pointer(gdtptr + 0x00)) = 0x0000000000000000
 	*(*uint64)(unsafe.Pointer(gdtptr + 0x08)) = 0x00af9b000000ffff
 	*(*uint64)(unsafe.Pointer(gdtptr + 0x10)) = 0x00af93000000ffff
