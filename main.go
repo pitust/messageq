@@ -6,6 +6,8 @@ import (
 	"github.com/pitust/messageq/v2/irq"
 	"github.com/pitust/messageq/v2/lapic"
 	"github.com/pitust/messageq/v2/misc"
+	"github.com/pitust/messageq/v2/process"
+	"github.com/pitust/messageq/v2/syscall"
 	"github.com/pitust/messageq/v2/vm"
 )
 
@@ -14,6 +16,7 @@ func main() {
 
 	descr.InitGDT()
 	descr.InitIDT()
+	syscall.Init()
 
 	r := irq.Regs{}
 	irq.KSVC_regsptr(irq.SERVICE_STORE_REGS, &r)
@@ -39,16 +42,24 @@ func main() {
 
 	}
 	lapic.Config()
+	vm.KernelVM = vm.CaptureUserVM()
 
-	page := vm.PhysAlloc()
-	vm.Map(uintptr(page), MMAP_LOW, vm.FL_USER | vm.FL_READ)
-	*misc.Uint16Ptr(MMAP_LOW) = 0xfeeb
-	r.RIP = MMAP_LOW
-	r.Flgs |= 0x200
-	lapic.StartDeadline()
-	irq.KSVC_regsptr(irq.SERVICE_SCHEDULE_USER, &r)
-
-	println("No crash??")
+	proc := process.CreateProcess()
+	thr := proc.CreateThread()
+	thr.With(func() {
+		page := vm.PhysAlloc()
+		vm.Map(uintptr(page), MMAP_LOW, vm.FL_USER | vm.FL_READ)
+		*misc.Uint16Ptr(MMAP_LOW) = 0x14cd
+		*misc.Uint16Ptr(MMAP_LOW + 2) = 0xfeeb
+	})
+	regs := thr.Regs()
+	regs.RIP = MMAP_LOW
+	process.SchedLoop()
+	process.SchedLoop()
+	process.SchedLoop()
+	
+	println("Done!")
+	
 	for {
 	}
 }

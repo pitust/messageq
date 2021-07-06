@@ -14,9 +14,6 @@ func putchar(c int) int
 //export do_isr_handle
 func HandleISR(isr uint8, ptr unsafe.Pointer) {
 	regs := RegsFromPointer(ptr)
-	println("isr", isr)
-	println("err", regs.Err)
-	println("rip", unsafe.Pointer(uintptr(regs.RIP)))
 	if regs.CS == 8 && isr == 3 {
 		println("Entered a kSVC ISR!")
 		command := regs.RDI
@@ -48,7 +45,5 @@ func HandleISR(isr uint8, ptr unsafe.Pointer) {
 		regs.WriteTo(ptr)
 		return
 	}
-	for {
-		putchar(0x66)
-	}
+	for {}
 }
