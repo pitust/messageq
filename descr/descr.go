@@ -13,6 +13,8 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+// Descriptors (TSS, IDT, GDT)
 package descr
 type Descriptor struct {
 	low uintptr
