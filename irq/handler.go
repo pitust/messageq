@@ -15,7 +15,6 @@ func putchar(c int) int
 func HandleISR(isr uint8, ptr unsafe.Pointer) {
 	regs := RegsFromPointer(ptr)
 	if regs.CS == 8 && isr == 3 {
-		println("Entered a kSVC ISR!")
 		command := regs.RDI
 		if command == SERVICE_STORE_REGS {
 			args := (*Regs)(unsafe.Pointer(uintptr(regs.RSI)))

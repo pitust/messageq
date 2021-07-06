@@ -27,11 +27,8 @@ func SchedLoop() {
 				}
 				if rv&irq.SERVICE_IRQ_NOTE == irq.SERVICE_IRQ_NOTE {
 					isr := rv & 0xff
-					println("isr =", misc.Hex(isr))
-					println("err =", misc.Hex(thr.regs.Err))
 					if isr >= 0x20 {
 						// preempted!
-						println("Thread preempted")
 						lapic.EOI()
 						if isr == 0x20 {
 							return
