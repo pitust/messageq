@@ -22,11 +22,11 @@ func StartDeadline() {
 	println("Starting deadline...")
 	apicBase := msr.Read(/* IA32_APIC_BASE */ 0x1b)
 	lapic := uintptr(apicBase) & 0xffff_ffff_ffff_f000
-	*misc.Uint64Ptr(lapic + 0x380) = 0xfffffff
+	*misc.Uint32Ptr(lapic + 0x380) = 0xfffff
 }
 func EOI() {
 	println("EOI")
 	apicBase := msr.Read(/* IA32_APIC_BASE */ 0x1b)
 	lapic := uintptr(apicBase) & 0xffff_ffff_ffff_f000
-	*misc.Uint64Ptr(lapic + 0xB0) = 0
+	*misc.Uint32Ptr(lapic + 0xB0) = 0
 }

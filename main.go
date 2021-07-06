@@ -49,8 +49,8 @@ func main() {
 	thr.With(func() {
 		page := vm.PhysAlloc()
 		vm.Map(uintptr(page), MMAP_LOW, vm.FL_USER | vm.FL_READ)
-		*misc.Uint16Ptr(MMAP_LOW) = 0x14cd
-		*misc.Uint16Ptr(MMAP_LOW + 2) = 0xfeeb
+		*misc.Uint16Ptr(MMAP_LOW + 4) = 0x14cd
+		*misc.Uint16Ptr(MMAP_LOW + 0) = 0xfeeb
 	})
 	regs := thr.Regs()
 	regs.RIP = MMAP_LOW

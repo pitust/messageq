@@ -20,7 +20,6 @@ func SchedLoop() {
 				if thr.regs.CS != descr.GDT_USER_CODE {
 					panic("bad CS (attack prevented?)")
 				}
-				// lapic.EOI()
 				lapic.StartDeadline()
 				rv := irq.KSVC_regsptr(irq.SERVICE_SCHEDULE_USER, &thr.regs)
 				if rv&irq.SERVICE_ERR == irq.SERVICE_ERR {
@@ -30,9 +29,10 @@ func SchedLoop() {
 					isr := rv & 0xff
 					println("isr =", misc.Hex(isr))
 					println("err =", misc.Hex(thr.regs.Err))
-					if isr > 0x20 {
+					if isr >= 0x20 {
 						// preempted!
 						println("Thread preempted")
+						lapic.EOI()
 						if isr == 0x20 {
 							return
 						}
